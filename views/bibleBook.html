@@ -1,0 +1,16 @@
+<article>
+	<div class="row">
+		<h4>
+			<a ng-href="#/"><span class="glyphicon glyphicon-triangle-left"></span>{{ book }}</a>
+		</h4>
+
+		<div ng-repeat="ch in chapters">
+			<!-- books links -->
+			<a href="#/bible/{{ book }}/{{ ch }}">
+				<div class="square col-md-2 col-xs-1">
+					<h5>{{ ch }}</h5>
+				</div>
+			</a>
+		</div>
+	</div>
+</article>

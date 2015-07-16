@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang='en' ng-app='nwtApp'>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>JW Bible Assistant</title>
+
+	<!-- Angularjs Core Script-->
+	<script src="libs/angularjs-1.2.16/angularjs.min.js"></script>
+	<!-- Angularjs Dependencies -->
+	<script src="libs/angularjs-1.2.16/angularjs-route.min.js"></script>
+	<script src="libs/angularjs-1.2.16/angularjs-sanitize.min.js"></script>
+	<script src="libs/angularjs-1.2.16/angularjs-touch.min.js"></script>
+	<script src="libs/angularjs-1.2.16/angularjs-animate.min.js"></script>
+	<script src="libs/angularjs-1.2.16/angularjs-cookies.min.js"></script>
+
+	<!-- jQuery -->
+	<script src="libs/jquery/jquery-2.1.3.min.js"></script>
+	<script src="libs/jquery/jquery-ui.min.js"></script>
+	<link rel="stylesheet" href="libs/jquery/jquery-ui.min.css" />
+
+	<!-- Bootstrap -->
+	<script src="libs/bootstrap/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css">
+
+	<!-- Custom Styles sheets CSS/javaScript -->
+	<link rel="stylesheet" href="styles/custom.css" />
+	<script src="styles/custom.js"></script>
+	<!-- UI javaScripts -->
+
+	<!-- Application Scripts -->
+	<script src="js/app.js"></script>
+	<script src="js/services/customServices.js"></script>
+	<script src="js/controllers/bibleControllers.js"></script>
+	<script src="js/filters/customFilters.js"></script>
+	
+</head>
+
+<body ng-controller="TopController">
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-2 col-xs-2">
+					<a ng-href="#/" title="home" class="menu">
+						<img ng-src="img/banner.png" />
+					</a>
+				</div>
+
+				<div class="col-md-10 col-xs-10">
+					<ul class="nav nav-pills navbar-right pull-right">
+						<li>
+							<form ng-submit="search(key)">
+								<input ng-model="key" type='search' class="form-control" placeholder="Keyword Search" autofocus required/>
+							</form>
+							
+							<a ng-href='' class="trigger" title="Search">
+								<span class="glyphicon glyphicon-search"></span>
+							</a>
+						</li>
+						<li class="menu">
+							<a ng-href='' title="bookmarks" ng-click="getBookmarks()">
+								<span class="glyphicon glyphicon-bookmark"></span>
+							</a>
+						</li>
+						<li class="menu">
+							<a ng-href='' title="settings" ng-click="showModal('#settings-modal')">
+								<span class="glyphicon glyphicon-cog"></span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div><!-- ./row -->
+		</div><!-- ./container-fluid -->
+	</nav><!-- ./navbar navbar-default --> 
+
+	<div class="container">
+		<div class="modal fade" id="search-modal">
+			<div class="modal-dialog modal-lg" role="dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" ng-click="hideModal('#search-modal')" aria-label="close">
+							<span aria-hidden="true">&times</span>
+						</button>
+
+						<h4 class="modal-title">Search Results</h4>
+					</div>
+
+					<div class="modal-body">
+						<div ng-repeat="result in results | paginate: 15 : page" ng-hide="show_verse">
+							<a ng-click="setBookmark(result)">
+								<h4>{{ result.book }} <small>{{ result.ch }}</small></h4>
+								<p><b>{{ result.v }}</b> <span ng-bind-html="result.text | highlight:search_key"></span></p>
+							</a>
+							<hr />
+						</div>
+
+						<div ng-show="no_results">
+							<p>No results</p>
+						</div>
+
+						<div ng-show="show_verse">
+							<a ng-click="setBookmarks(verse)">
+								<h4>{{ verse.book }} <small>{{ verse.ch }}</small></h4>
+								<p><b>{{ verse.v }}</b> {{ verse.text }}</p>
+							</a>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button  ng-click="selectPage(page - 1)" type="button" class="btn btn-default pull-left">
+							<span class="glyphicon glyphicon-backward"></span>
+						</button>
+
+						<button ng-click="selectPage(page + 1)" type="button" class="btn btn-default pull-right">
+							<span class="glyphicon glyphicon-forward"></span>
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="modal fade" id="settings-modal">
+			<div class="modal-dialog modal-lg" role="dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" ng-click="hideModal('#settings-modal')" aria-label="close">
+							<span aria-hidden="true">&times</span>
+						</button>
+
+						<h4>Settings</h4>
+					</div>
+
+					<div class="modal-body">
+						<div ng-repeat="lang in languages">
+							<div class="container-fluid">
+								<div class="form-group">
+									<label>Select Language</label>
+									<select ng-change="setLanguage(lang_val.lang)" ng-model="lang_val" ng-options="lang.description for lang in languages" class="form-control">
+										<option value="{{ lang.lang }}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="modal fade" id="bookmark-modal">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" ng-click="hideModal('#bookmark-modal')">
+							<span aria-hidden="true">&times</span>
+						</button>
+
+						<h4>Bookmarks</h4>
+					</div>
+
+					<div class="modal-body">
+						<div ng-repeat="bookmark in bookmarks">
+							<button class="pull-right close" type="button" ng-click="removeBookmarks(bookmark)">
+								<span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+							</button>
+							
+							<h4>{{ bookmark.book }} <small>{{ bookmark.ch }}</small></h4>
+							<p><b>{{ bookmark.v}}</b> {{ bookmark.text }}</p>
+							<hr />
+						</div>
+					</div><!-- /.modal-body -->
+
+					<div class="modal-footer"></div><!-- /.modal-footer -->
+				</div><!-- modal-content -->
+			</div><!-- modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="modal fade" id="confirm-modal">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" ng-click="hideModal('#confirm-modal')">
+							<span aria-hidden="true">&times</span>
+						</button>
+
+						<h4>Confirm</h4>
+					</div><!-- /.modal-header -->
+
+					<div class="modal-body">
+						<p>{{ confirm_msg }}</p>
+						<button ng-click="confirm('yes')" class="btn btn-danger btn-lg">Yes</button>
+						<button ng-click="confirm('no')" class="btn btn-primary btn-lg pull-right">No</button>
+					</div><!-- /.modal-footer -->
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="loading" ng-show="loading">
+			<img src="img/loading-img.gif" />
+		</div>
+
+		<div ng-hide="loading" ng-view class="container-fluid"></div>
+	</div><!-- ./container -->
+</body>
+</html>

@@ -1,0 +1,76 @@
+/* 
+===========================================================
+NAVIGATION STYLES
+===========================================================
+*/
+input[type=search] {
+	margin-top: 5px;
+	width: 0;
+	background-image: url('../img/search-icon.png');
+	
+	text-indent: 10px;
+	text-decoration: none;
+	
+	display: none;
+}
+
+button[type=submit] {
+	margin-top: 5px;
+}
+
+
+nav img {
+	margin-top: 5px;
+}
+
+nav li {
+	margin-top: 5px;
+}
+
+a {
+	cursor: pointer;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+nav span {
+	font-size: 20px;
+}
+/* 
+============================================================
+Dialog boxes
+============================================================
+*/
+
+/* 
+============================================================
+Home 
+============================================================
+*/
+article {
+	margin-top: 60px;
+}
+
+article a {
+	color: #1e1e41;
+}
+
+h4 {
+	font-family: sans-serif;
+}
+
+.square {
+	transition: all 0.2s;
+	background-color: #381f71;
+	margin: 1px;
+	height: 50px;
+	width: 50px;
+	
+}
+
+.square h5 {
+	color: white;
+	text-align: center;
+}

@@ -1,0 +1,27 @@
+<article>
+	<div class="row">
+		<h3>{{ scriptureType[0].part1 }}</h3>
+	
+		<div ng-repeat="p1 in part1">
+			<!-- books links -->
+			<a ng-href="#/bible/{{ p1.book }}">
+				<div class="square col-md-2 col-xs-1">
+					<h5>{{ p1.abr }}</h5>
+				</div>
+			</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<h3>{{ scriptureType[1].part2 }}</h3>
+		
+		<div ng-repeat="p2 in part2">
+			<!-- books links -->
+			<a ng-href="#/bible/{{ p2.book }}">
+				<div class="square col-md-2 col-xs-1">
+					<h5>{{ p2.abr }}</h5>
+				</div>
+			</a>
+		</div>
+	</div>
+</article>

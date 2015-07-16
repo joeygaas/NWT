@@ -1,0 +1,15 @@
+<article>	
+	<h4>
+		<a ng-href="#/bible/{{ chapter[0]['book'] }}"><span class="glyphicon glyphicon-triangle-left"></span>{{ chapter[0]['book'] }} </a><small>{{ chapter[0]['ch']}}</small>
+	</h4>
+	<hr />
+
+	<h5 ng-if="chapter[0]['title']"><b>{{ chapter[0]['title'] }}</b></h5>
+
+	<p ng-repeat="verse in chapter" >
+		<b id="anchor{{ verse.v }}">{{ verse.v }}</b> 
+		<a ng-href="" ng-click="setBookmark(verse)">
+			{{ verse.text }}
+		</a>
+	</p>
+</article>
